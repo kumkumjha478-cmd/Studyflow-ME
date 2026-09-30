@@ -95,11 +95,9 @@
       flex-direction: column;
     }
 
-    /* Scrollbars */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
 
-    /* Splash */
     #splashScreen {
       position: fixed;
       inset: 0;
@@ -127,7 +125,6 @@
     .splash-track { width: 140px; height: 3px; background: var(--card-border); border-radius: 6px; margin-top: 20px; overflow: hidden; }
     .splash-fill { width: 0%; height: 100%; background: var(--accent); transition: width 1s ease; }
 
-    /* Layout */
     .app-layout {
       display: flex;
       width: 100vw;
@@ -195,7 +192,7 @@
       width: 100%;
       margin: 0 auto;
       flex: 1;
-      padding-bottom: 80px; /* Room for bottom dock */
+      padding-bottom: 80px;
     }
 
     .tab-view { display: none; width: 100%; }
@@ -266,7 +263,6 @@
       align-items: center;
     }
 
-    /* Demon Chat */
     .chat-box {
       background: var(--bg);
       border: 1px solid var(--card-border);
@@ -301,7 +297,6 @@
       word-break: break-word;
     }
 
-    /* Mobile Bottom Navigation */
     .mobile-nav {
       display: none;
       position: fixed;
@@ -338,7 +333,6 @@
 </head>
 <body class="theme-oled" id="appBody">
 
-  <!-- SPLASH SCREEN -->
   <div id="splashScreen">
     <div class="splash-emblem">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -353,7 +347,6 @@
   </div>
 
   <div class="app-layout">
-    <!-- Desktop Sidebar -->
     <aside class="sidebar">
       <div class="brand-box">
         <div class="brand-head">
@@ -371,10 +364,9 @@
       <button class="nav-item" onclick="switchTab('notes')"><span>📚 Vault Notes</span></button>
       <button class="nav-item" onclick="switchTab('test')"><span>📝 Exam Suite</span></button>
       <button class="nav-item" onclick="switchTab('syllabus')"><span>📊 Syllabus</span></button>
-      <button class="nav-item" onclick="switchTab('arcade')"><span>⚔️ Boss Arcade</span></button>
+      <button class="nav-item" onclick="switchTab('arcade')"><span>⚔️️ Boss Arcade</span></button>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-viewport">
       <header class="top-header">
         <h1 id="viewTitle" style="font-size: 14px; font-weight: 800; color: var(--accent);">😈 Doubt Demon</h1>
@@ -400,7 +392,7 @@
               <button class="btn btn-demon" onclick="summonDemon()">Summon</button>
             </div>
             <div id="demonChatBox" class="chat-box">
-              <div class="demon-message"><b>Doubt Demon:</b> Enter a topic above, mortal. Let's see if your logic has any spine or if you only repeat rote lines.</div>
+              <div class="demon-message"><b>Doubt Demon:</b> Enter a topic above, mortal. Let's see if your logic has any spine or if you only repeat textbook lines.</div>
             </div>
             <div class="flex-row">
               <input type="text" id="demonReplyInput" class="input-field" placeholder="Defend your premise..." onkeydown="if(event.key==='Enter') sendDemonCounter()" />
@@ -501,7 +493,6 @@
     </main>
   </div>
 
-  <!-- Mobile Bottom Dock (App-Like Nav) -->
   <nav class="mobile-nav">
     <button class="mobile-nav-item active" onclick="switchTab('demon')">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
@@ -526,7 +517,6 @@
   </nav>
 
   <script>
-    // Boot
     window.addEventListener('DOMContentLoaded', () => {
       const fill = document.getElementById('splashFill');
       const splash = document.getElementById('splashScreen');
@@ -542,7 +532,6 @@
       if (s) localStorage.setItem('sf_me_theme', t);
     }
 
-    // Clean Render KaTeX + Markdown
     function cleanRender(t) {
       if (!t) return '';
       t = t.replace(/\$\$([\s\S]+?)\$\$/g, (m, eq) => {
@@ -556,7 +545,6 @@
       return t.replace(/\n/g, '<br/>');
     }
 
-    // Gemini Engine (Updated Valid Model Chain)
     let ENGINE_KEY = localStorage.getItem('sf_me_key') || localStorage.getItem('sf_engine_key') || '';
 
     function promptEngineKey() {
@@ -568,9 +556,10 @@
       }
     }
 
+    // UPDATED ACTIVE CANDIDATE MODELS (Gemini 3.5 & 3.8 Chain)
     const CANDIDATE_MODELS = [
-      'gemini-2.5-flash',
-      'gemini-2.5-flash-lite'
+      'gemini-3.5-flash-lite',
+      'gemini-3.8-flash'
     ];
 
     async function queryAiEngine(promptText, systemInstruction = "") {
@@ -611,7 +600,6 @@
       throw new Error(lastError?.message || "AI Busy. Check key or retry.");
     }
 
-    // Navigation
     function switchTab(t) {
       document.querySelectorAll('.tab-view').forEach(e => e.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
@@ -643,7 +631,6 @@
       }
     }
 
-    // Doubt Demon
     const DEMON_PROMPT = `You are the Ruthless Doubt Demon. Expose every conceptual fallacy, rote memory trap, or lazy intuition the student has. Speak with dark, sarcastic intellectual arrogance. Never give direct answers. Construct deceptive counter-examples and paradoxes. Punchy, sharp responses (max 3 sentences).`;
     let activeTopic = "";
 
@@ -681,7 +668,6 @@
       }
     }
 
-    // Quick Solver
     async function askDoubtSolver() {
       const inp = document.getElementById('solverUserInput');
       const chat = document.getElementById('solverChatHistory');
@@ -705,7 +691,6 @@
       } catch (e) { p.innerText = e.message; }
     }
 
-    // Lectures
     function playLecture() {
       const u = document.getElementById('lectureUrlInput').value.trim();
       const p = document.getElementById('lecturePlayer');
@@ -725,7 +710,6 @@
       } catch(e) { box.innerText = e.message; }
     }
 
-    // Notes
     async function generateLiveNotes(type) {
       const topic = document.getElementById('notesTopicInput').value.trim() || 'Tissues';
       const d = document.getElementById('notesDisplay');
@@ -736,7 +720,6 @@
       } catch(e) { d.innerText = e.message; }
     }
 
-    // Exam
     let curPaper = '';
     async function generateExamPaper() {
       const t = document.getElementById('testTopicInput').value.trim() || 'Motion';
@@ -760,7 +743,6 @@
       } catch(e) { rep.innerText = e.message; }
     }
 
-    // Editable Syllabus
     let syllabus = JSON.parse(localStorage.getItem('sf_me_syl') || JSON.stringify([
       { name: "Tissues (Biology)", done: false },
       { name: "Motion (Physics)", done: true }
@@ -800,7 +782,6 @@
       } catch(e) { box.innerText = e.message; }
     }
 
-    // Arcade
     let hpB = 100, hpP = 100;
     async function initBossBattle() {
       const a = document.getElementById('arcadeArena');
