@@ -3,27 +3,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>StudyFlow ME — by Priyansh</title>
   
-  <!-- Math Formula & Symbol Rendering (KaTeX) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
   <style>
     :root {
       --bg: #000000;
-      --card: #0a0a0a;
-      --card-border: #1a1a1a;
-      --card-hover: #141414;
+      --card: #0c0c0c;
+      --card-border: #1e1e1e;
+      --card-hover: #161616;
       --text: #ffffff;
-      --text-muted: #888888;
+      --text-muted: #8e8e93;
       --accent: #ef4444;
-      --accent-glow: rgba(239, 68, 68, 0.4);
-      --accent-secondary: #dc2626;
+      --accent-glow: rgba(239, 68, 68, 0.35);
+      --accent-secondary: #b91c1c;
       --success: #10b981;
       --danger: #ef4444;
-      --sidebar-width: 250px;
+      --sidebar-width: 240px;
     }
 
     body.theme-oled {
@@ -35,7 +34,7 @@
       --text-muted: #737373;
       --accent: #ef4444;
       --accent-glow: rgba(239, 68, 68, 0.4);
-      --accent-secondary: #b91c1c;
+      --accent-secondary: #991b1b;
     }
 
     body.theme-minimal-white {
@@ -80,21 +79,27 @@
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
+      max-width: 100%;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      background-color: var(--bg);
+      color: var(--text);
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
       display: flex;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      flex-direction: column;
     }
 
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
 
+    /* Splash */
     #splashScreen {
       position: fixed;
       inset: 0;
@@ -104,62 +109,29 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
     }
-
     .splash-emblem {
-      width: 76px;
-      height: 76px;
-      border-radius: 22px;
+      width: 70px;
+      height: 70px;
+      border-radius: 20px;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 45px var(--accent-glow);
-      margin-bottom: 20px;
+      box-shadow: 0 0 35px var(--accent-glow);
+      margin-bottom: 16px;
     }
+    .splash-title { font-size: 22px; font-weight: 800; }
+    .splash-byline { font-size: 12px; color: var(--accent); font-weight: 700; margin-top: 4px; }
+    .splash-track { width: 140px; height: 3px; background: var(--card-border); border-radius: 6px; margin-top: 20px; overflow: hidden; }
+    .splash-fill { width: 0%; height: 100%; background: var(--accent); transition: width 1s ease; }
 
-    .splash-title {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 6px;
-    }
-
-    .splash-byline {
-      font-size: 13px;
-      color: var(--accent);
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    .splash-quote {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      font-style: italic;
-    }
-
-    .splash-track {
-      width: 150px;
-      height: 3px;
-      background: var(--card-border);
-      border-radius: 10px;
-      margin-top: 26px;
-      overflow: hidden;
-    }
-
-    .splash-fill {
-      width: 0%;
-      height: 100%;
-      background: var(--accent);
-      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
+    /* Layout */
     .app-layout {
       display: flex;
       width: 100vw;
-      height: 100vh;
+      height: 100dvh;
       overflow: hidden;
     }
 
@@ -169,75 +141,43 @@
       border-right: 1px solid var(--card-border);
       display: flex;
       flex-direction: column;
+      padding: 16px 10px;
+      gap: 4px;
       flex-shrink: 0;
-      padding: 18px 12px;
-      gap: 5px;
-      z-index: 50;
     }
 
     .brand-box {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      padding: 4px 6px 16px 6px;
+      padding: 4px 6px 14px 6px;
       border-bottom: 1px solid var(--card-border);
       margin-bottom: 8px;
     }
-
-    .brand-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
+    .brand-head { display: flex; align-items: center; gap: 8px; }
     .brand-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 9px;
+      width: 30px; height: 30px; border-radius: 8px;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 13px;
-      color: #fff;
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px;
     }
-
-    .brand-box h2 { font-size: 14.5px; font-weight: 800; }
-    .brand-tagline { font-size: 11px; color: var(--accent); font-weight: 700; }
-    .brand-quote { font-size: 10px; color: var(--text-muted); font-style: italic; }
 
     .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
-      border-radius: 10px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
-      width: 100%;
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      border-radius: 8px; background: transparent; border: none;
+      color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer;
+      text-align: left; width: 100%;
     }
-    .nav-item:hover { background-color: var(--card-hover); color: var(--text); }
     .nav-item.active { background-color: var(--card-border); color: var(--accent); }
-    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
 
     .main-viewport {
       flex: 1;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      height: 100dvh;
       overflow-y: auto;
-      position: relative;
+      overflow-x: hidden;
+      width: 100%;
     }
 
     .top-header {
-      padding: 12px 20px;
+      padding: 10px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -246,56 +186,56 @@
       position: sticky;
       top: 0;
       z-index: 40;
+      width: 100%;
+      flex-shrink: 0;
     }
 
     .content-container {
-      padding: 20px;
-      max-width: 1200px;
+      padding: 12px;
       width: 100%;
       margin: 0 auto;
       flex: 1;
+      padding-bottom: 80px; /* Room for bottom dock */
     }
 
-    .tab-view { display: none; }
+    .tab-view { display: none; width: 100%; }
     .tab-view.active { display: block; animation: fadeIn 0.2s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .panel {
       background-color: var(--card);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 18px;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+      width: 100%;
     }
 
     .panel-title {
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 700;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .btn {
       background-color: var(--accent);
       color: #ffffff;
       border: none;
-      padding: 8px 14px;
-      border-radius: 9px;
-      font-size: 12.5px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      transition: opacity 0.2s;
+      white-space: nowrap;
     }
-    .btn:hover { opacity: 0.9; }
-    .btn svg { width: 14px; height: 14px; }
-
     .btn-secondary { background-color: var(--card-border); color: var(--text); }
-    .btn-secondary:hover { background-color: var(--card-hover); }
     .btn-engine {
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
       color: #ffffff;
@@ -305,104 +245,103 @@
       background: linear-gradient(135deg, #ef4444, #7f1d1d);
       color: #fff;
       font-weight: 800;
-      box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
     }
-    .btn-success { background-color: var(--success); color: #fff; }
 
     .input-field {
       background-color: var(--bg);
       border: 1px solid var(--card-border);
       color: var(--text);
-      padding: 9px 14px;
-      border-radius: 9px;
+      padding: 9px 12px;
+      border-radius: 8px;
       font-size: 13px;
       outline: none;
       width: 100%;
-      transition: border-color 0.2s;
     }
     .input-field:focus { border-color: var(--accent); }
 
-    .video-container-full {
+    .flex-row {
+      display: flex;
+      gap: 6px;
       width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #000;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--card-border);
-      margin-top: 14px;
+      align-items: center;
     }
-    .video-container-full iframe { width: 100%; height: 100%; border: none; }
 
-    .slide-scratchpad {
-      position: fixed;
-      top: 0;
-      right: -420px;
-      width: 400px;
-      height: 100vh;
-      background-color: var(--card);
-      border-left: 1px solid var(--card-border);
-      box-shadow: -10px 0 30px rgba(0,0,0,0.6);
-      z-index: 100;
-      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Demon Chat */
+    .chat-box {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px;
+      min-height: 220px;
+      max-height: 380px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
-      padding: 20px;
+      gap: 10px;
+      margin-bottom: 10px;
+      width: 100%;
     }
-    .slide-scratchpad.open { right: 0; }
+    .demon-message {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 3px solid var(--accent);
+      padding: 10px 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .user-message {
+      background: var(--card-border);
+      padding: 9px 12px;
+      border-radius: 8px;
+      align-self: flex-end;
+      max-width: 88%;
+      font-size: 13px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
 
+    /* Mobile Bottom Navigation */
     .mobile-nav {
       display: none;
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 62px;
-      background-color: var(--card);
+      height: 60px;
+      background-color: rgba(12, 12, 12, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-top: 1px solid var(--card-border);
-      z-index: 90;
+      z-index: 1000;
       justify-content: space-around;
       align-items: center;
-      padding: 0 4px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
     .mobile-nav-item {
       background: none; border: none; color: var(--text-muted); font-size: 10px;
-      display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1;
+      padding: 6px 0; cursor: pointer;
     }
-    .mobile-nav-item.active { color: var(--accent); }
+    .mobile-nav-item.active { color: var(--accent); font-weight: 700; }
     .mobile-nav-item svg { width: 18px; height: 18px; }
 
-    .demon-message {
-      background: rgba(239, 68, 68, 0.08);
-      border-left: 3px solid var(--accent);
-      padding: 12px;
-      border-radius: 0 8px 8px 0;
-      font-size: 13.5px;
-      line-height: 1.6;
-    }
-    .user-message {
-      background: var(--card-border);
-      padding: 10px 14px;
-      border-radius: 8px;
-      align-self: flex-end;
-      max-width: 85%;
-      font-size: 13.5px;
-    }
-
-    @media (max-width: 900px) {
+    @media (max-width: 850px) {
       .sidebar { display: none; }
       .mobile-nav { display: flex; }
-      .slide-scratchpad { width: 100vw; right: -100vw; }
-      .main-viewport { height: calc(100vh - 62px); }
-      .content-container { padding: 14px; }
-      .top-header { padding: 10px 14px; }
+      .main-viewport { height: 100dvh; }
+      .content-container { padding: 10px 10px 85px 10px; }
+      .top-header h1 { font-size: 13.5px !important; }
+      .btn { padding: 7px 10px; font-size: 11.5px; }
     }
   </style>
 </head>
 <body class="theme-oled" id="appBody">
 
+  <!-- SPLASH SCREEN -->
   <div id="splashScreen">
     <div class="splash-emblem">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
         <path d="M2 17l10 5 10-5"></path>
         <path d="M2 12l10 5 10-5"></path>
@@ -410,258 +349,150 @@
     </div>
     <div class="splash-title">StudyFlow ME</div>
     <div class="splash-byline">by Priyansh (Mobile Edition)</div>
-    <div class="splash-quote">"powered by Socratic Demon & Gemini Engine"</div>
-    <div class="splash-track">
-      <div class="splash-fill" id="splashFill"></div>
-    </div>
+    <div class="splash-track"><div class="splash-fill" id="splashFill"></div></div>
   </div>
 
   <div class="app-layout">
+    <!-- Desktop Sidebar -->
     <aside class="sidebar">
       <div class="brand-box">
         <div class="brand-head">
           <div class="brand-avatar">ME</div>
           <div>
-            <h2>StudyFlow ME</h2>
-            <div class="brand-tagline">by Priyansh</div>
+            <h2 style="font-size: 14px; font-weight: 800;">StudyFlow ME</h2>
+            <div style="font-size: 10.5px; color: var(--accent); font-weight: 700;">Mobile Edition</div>
           </div>
         </div>
-        <div class="brand-quote">"Mobile Edition Active"</div>
       </div>
 
-      <button class="nav-item active" onclick="switchTab('demon')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        <span>😈 Doubt Demon</span>
-      </button>
-
-      <button class="nav-item" onclick="switchTab('solver')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        <span>🤖 AI Doubt Solver</span>
-      </button>
-
-      <button class="nav-item" onclick="switchTab('lectures')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        <span>Lectures & AI Recap</span>
-      </button>
-
-      <button class="nav-item" onclick="switchTab('notes')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
-        <span>High-Yield Vault</span>
-      </button>
-
-      <button class="nav-item" onclick="switchTab('test')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-        <span>Exam Suite & Exports</span>
-      </button>
-
-      <button class="nav-item" onclick="switchTab('syllabus')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-        <span>Syllabus & Backlog</span>
-      </button>
-
-      <button class="nav-item" onclick="switchTab('arcade')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 12h4m-2-2v4m10-2h.01m-3 0h.01"></path></svg>
-        <span>Boss Arcade</span>
-      </button>
-
-      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px;">
-        <button class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 11px;" onclick="toggleAmbientNoise()">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
-          <span id="noiseBtnText">Focus Sound</span>
-        </button>
-      </div>
+      <button class="nav-item active" onclick="switchTab('demon')"><span>😈 Doubt Demon</span></button>
+      <button class="nav-item" onclick="switchTab('solver')"><span>🤖 Quick AI Solver</span></button>
+      <button class="nav-item" onclick="switchTab('lectures')"><span>🎬 Lectures</span></button>
+      <button class="nav-item" onclick="switchTab('notes')"><span>📚 Vault Notes</span></button>
+      <button class="nav-item" onclick="switchTab('test')"><span>📝 Exam Suite</span></button>
+      <button class="nav-item" onclick="switchTab('syllabus')"><span>📊 Syllabus</span></button>
+      <button class="nav-item" onclick="switchTab('arcade')"><span>⚔️ Boss Arcade</span></button>
     </aside>
 
+    <!-- Main Content -->
     <main class="main-viewport">
       <header class="top-header">
-        <h1 id="viewTitle" style="font-size: 15px; font-weight: 800; color: var(--accent);">😈 Doubt Demon (Interrogator)</h1>
-        
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <select id="themeSelector" class="input-field" style="width: auto; padding: 5px 8px; font-size: 11px;" onchange="setInterfaceTheme(this.value)">
-            <option value="theme-oled">OLED Pitch Black</option>
-            <option value="theme-minimal-white">Clean Minimal White</option>
-            <option value="theme-cyberpunk">Emerald Cyberpunk</option>
-            <option value="theme-nordic">Nordic Slate Navy</option>
+        <h1 id="viewTitle" style="font-size: 14px; font-weight: 800; color: var(--accent);">😈 Doubt Demon</h1>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <select id="themeSelector" class="input-field" style="width: auto; padding: 4px 6px; font-size: 11px;" onchange="setInterfaceTheme(this.value)">
+            <option value="theme-oled">OLED Black</option>
+            <option value="theme-minimal-white">White</option>
+            <option value="theme-cyberpunk">Emerald</option>
+            <option value="theme-nordic">Nordic</option>
           </select>
-
-          <button class="btn btn-secondary" style="font-size: 11px; padding: 5px 10px;" onclick="toggleScratchpad()">Pad</button>
-          <button class="btn btn-engine" style="font-size: 11px; padding: 5px 10px;" onclick="promptEngineKey()">AI Key</button>
+          <button class="btn btn-engine" style="padding: 4px 8px; font-size: 11px;" onclick="promptEngineKey()">AI Key</button>
         </div>
       </header>
 
       <div class="content-container">
 
+        <!-- TAB 1: DOUBT DEMON -->
         <div id="tab-demon" class="tab-view active">
           <div class="panel" style="border-color: rgba(239, 68, 68, 0.3);">
-            <div class="panel-title" style="color: var(--accent);">
-              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-              <span>The Doubt Demon — Zero Mercy Conceptual Interrogator</span>
-            </div>
-            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
-              Enter a chapter or concept. The Demon will expose your delusions, test edge cases, and challenge you with dark intellectual sarcasm until your logic is rock solid.
-            </p>
-            
-            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-              <input type="text" id="demonTopicInput" class="input-field" placeholder="Feed topic to the Demon (e.g. Newton's 3rd Law, Xylem, Mole Concept)..." />
+            <div class="panel-title" style="color: var(--accent);">The Doubt Demon — Zero Mercy Interrogator</div>
+            <div class="flex-row" style="margin-bottom: 10px;">
+              <input type="text" id="demonTopicInput" class="input-field" placeholder="Topic (e.g. Newton's 3rd Law)..." />
               <button class="btn btn-demon" onclick="summonDemon()">Summon</button>
             </div>
-
-            <div id="demonChatBox" style="background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; min-height: 250px; max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px;">
-              <div class="demon-message">
-                <b>Doubt Demon:</b> You dare summon me? Name your concept, mortal. Let's see if you truly understand it or if you are merely parroting textbook lines without a shred of critical thought.
-              </div>
+            <div id="demonChatBox" class="chat-box">
+              <div class="demon-message"><b>Doubt Demon:</b> Enter a topic above, mortal. Let's see if your logic has any spine or if you only repeat rote lines.</div>
             </div>
-
-            <div style="display: flex; gap: 8px;">
-              <input type="text" id="demonReplyInput" class="input-field" placeholder="Defend your premises here..." onkeydown="if(event.key==='Enter') sendDemonCounter()" />
-              <button class="btn btn-demon" onclick="sendDemonCounter()">Debate</button>
+            <div class="flex-row">
+              <input type="text" id="demonReplyInput" class="input-field" placeholder="Defend your premise..." onkeydown="if(event.key==='Enter') sendDemonCounter()" />
+              <button class="btn btn-demon" onclick="sendDemonCounter()">Counter</button>
             </div>
           </div>
         </div>
 
+        <!-- TAB 2: QUICK SOLVER -->
         <div id="tab-solver" class="tab-view">
           <div class="panel">
-            <div class="panel-title">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-              <span>Instant AI Doubt Solver & Academic Chatbot</span>
+            <div class="panel-title">Instant Doubt Solver & Academic Chatbot</div>
+            <div id="solverChatHistory" class="chat-box">
+              <div style="color: var(--text-muted); font-size: 12.5px;">Type any numerical or theoretical doubt below for step-by-step resolution.</div>
             </div>
-            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
-              Direct, crystal-clear step-by-step solutions for numericals, reactions, derivations, and questions.
-            </p>
-
-            <div id="solverChatHistory" style="background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; min-height: 240px; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px;">
-              <div style="color: var(--text-muted); font-size: 13px;">Ask any question or paste a numerical problem below to get an instant breakdown.</div>
-            </div>
-
-            <div style="display: flex; gap: 8px;">
-              <input type="text" id="solverUserInput" class="input-field" placeholder="Ask your doubt or numerical..." onkeydown="if(event.key==='Enter') askDoubtSolver()" />
+            <div class="flex-row">
+              <input type="text" id="solverUserInput" class="input-field" placeholder="Ask your question..." onkeydown="if(event.key==='Enter') askDoubtSolver()" />
               <button class="btn btn-engine" onclick="askDoubtSolver()">Solve</button>
             </div>
           </div>
         </div>
 
+        <!-- TAB 3: LECTURES -->
         <div id="tab-lectures" class="tab-view">
           <div class="panel">
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <input type="text" id="lectureUrlInput" class="input-field" style="flex: 1;" placeholder="Paste YouTube lecture URL or topic..." />
+            <div class="flex-row" style="margin-bottom: 10px;">
+              <input type="text" id="lectureUrlInput" class="input-field" placeholder="YouTube URL..." />
               <button class="btn" onclick="playLecture()">Play</button>
-              <button class="btn btn-engine" onclick="generateAiLectureRecap()">Recap</button>
+              <button class="btn btn-secondary" onclick="generateAiLectureRecap()">Recap</button>
             </div>
-
-            <div class="video-container-full" id="lecturePlayer">
-              <div style="display:flex; height:100%; align-items:center; justify-content:center; color: var(--text-muted); font-size: 13px;">
-                Paste a YouTube lecture URL above to study.
-              </div>
+            <div style="width: 100%; aspect-ratio: 16/9; background:#000; border-radius:8px; overflow:hidden;" id="lecturePlayer">
+              <div style="display:flex; height:100%; align-items:center; justify-content:center; color:var(--text-muted); font-size:12px;">Paste URL to stream</div>
             </div>
-
-            <div id="lectureRecapBox" style="display: none; margin-top: 16px; background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <h3 style="font-size: 14px; font-weight: 700; color: var(--accent);">Lecture Traps & Highlights</h3>
-                <button class="btn btn-secondary" style="font-size: 11px; padding: 4px 8px;" onclick="downloadText('Lecture_Recap.txt', document.getElementById('lectureRecapContent').innerText)">Export</button>
-              </div>
-              <div id="lectureRecapContent" style="font-size: 13px; line-height: 1.6;"></div>
-            </div>
+            <div id="lectureRecapBox" style="display: none; margin-top: 10px; background: var(--bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.5;"></div>
           </div>
         </div>
 
+        <!-- TAB 4: NOTES -->
         <div id="tab-notes" class="tab-view">
           <div class="panel">
-            <div class="panel-title">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
-              <span>Notes & Examiner Formula Matrix</span>
+            <div class="panel-title">High-Yield Formula & Keyword Vault</div>
+            <input type="text" id="notesTopicInput" class="input-field" style="margin-bottom: 8px;" placeholder="Topic (e.g. Tissues, Motion)..." />
+            <div class="flex-row" style="margin-bottom: 10px; flex-wrap: wrap;">
+              <button class="btn btn-engine" style="flex:1;" onclick="generateLiveNotes('cheatsheet')">Cheatsheet</button>
+              <button class="btn btn-secondary" style="flex:1;" onclick="generateLiveNotes('detailed')">In-Depth</button>
+              <button class="btn btn-secondary" style="flex:1;" onclick="generateLiveNotes('keywords')">Keywords</button>
             </div>
-            <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
-              <input type="text" id="notesTopicInput" class="input-field" style="flex: 1;" placeholder="Enter topic (e.g. Tissues, Motion, Gravitation)..." />
-              <button class="btn btn-engine" onclick="generateLiveNotes('cheatsheet')">Cheatsheet</button>
-              <button class="btn btn-secondary" onclick="generateLiveNotes('detailed')">In-Depth</button>
-              <button class="btn btn-secondary" onclick="generateLiveNotes('keywords')">Keywords</button>
-            </div>
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 8px;">
-              <button class="btn btn-secondary" style="font-size: 11px; padding: 4px 8px;" onclick="downloadText('Notes.txt', document.getElementById('notesDisplay').innerText)">Export Notes</button>
-            </div>
-            <div id="notesDisplay" style="background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; min-height: 200px; font-size: 13.5px; line-height: 1.7;">Generate notes or cheatsheet above.</div>
+            <div id="notesDisplay" style="background: var(--bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.6; min-height: 180px;">Enter topic above to extract notes.</div>
           </div>
         </div>
 
+        <!-- TAB 5: EXAM SUITE -->
         <div id="tab-test" class="tab-view">
           <div class="panel">
-            <div class="panel-title">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path></svg>
-              <span>Diagnostic Exam Generator</span>
+            <div class="panel-title">Active Recall Exam Generator</div>
+            <div class="flex-row" style="margin-bottom: 8px;">
+              <input type="text" id="testTopicInput" class="input-field" placeholder="Chapter name..." />
+              <button class="btn btn-engine" onclick="generateExamPaper()">Generate</button>
             </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-bottom: 12px;">
-              <input type="text" id="testTopicInput" class="input-field" placeholder="Topic name..." />
-              <select id="testModeSelect" class="input-field">
-                <option value="school">Board / NCERT Pattern</option>
-                <option value="competitive">Competitive Trap Mode</option>
-              </select>
-              <select id="testMarksSelect" class="input-field">
-                <option value="15">15 Marks Drill</option>
-                <option value="30">30 Marks Unit Exam</option>
-              </select>
-              <button class="btn btn-engine" onclick="generateExamPaper()">Generate Paper</button>
+            <div id="examPaperCard" style="display:none; margin-top: 10px;">
+              <div id="paperContent" style="background:var(--bg); border:1px solid var(--card-border); border-radius:8px; padding:12px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+              <textarea id="studentAnswerText" class="input-field" rows="4" placeholder="Type your answers here..."></textarea>
+              <button class="btn btn-engine" style="margin-top:8px; width:100%;" onclick="gradeExamAnswers()">Submit & Grade</button>
             </div>
-
-            <div id="examPaperCard" style="display: none; background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; margin-top: 12px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                <h3 id="paperTitle" style="font-size: 14px; font-weight: 700; color: var(--accent);"></h3>
-                <div style="display: flex; gap: 6px;">
-                  <button class="btn btn-secondary" style="font-size: 10.5px;" onclick="downloadText('Exam_Paper.txt', currentTestPaperText)">Paper</button>
-                  <button class="btn btn-secondary" style="font-size: 10.5px;" onclick="fetchAndDownloadAnswerKey()">Answer Key</button>
-                </div>
-              </div>
-              <div id="paperContent" style="font-size: 13px; line-height: 1.6; margin-bottom: 14px;"></div>
-              
-              <div style="border-top: 1px solid var(--card-border); padding-top: 14px;">
-                <p style="font-weight: 700; font-size: 12.5px; margin-bottom: 6px;">Your Written Solutions:</p>
-                <textarea id="studentAnswerText" class="input-field" rows="5" placeholder="Type answers here..."></textarea>
-                <button class="btn btn-engine" style="margin-top: 8px;" onclick="gradeExamAnswers()">Evaluate</button>
-              </div>
-            </div>
-
-            <div id="gradeReportCard" style="display: none; background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; margin-top: 16px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h3 style="font-size: 14px; font-weight: 700; color: var(--success);">Evaluator Report</h3>
-                <button class="btn btn-success" style="font-size: 10.5px;" onclick="downloadText('Scorecard.txt', currentGradeReportText)">Download</button>
-              </div>
-              <div id="gradeReportBody" style="font-size: 13px; line-height: 1.6;"></div>
-            </div>
+            <div id="gradeReportCard" style="display:none; margin-top: 10px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; padding:12px; font-size:13px; line-height:1.6;"></div>
           </div>
         </div>
 
+        <!-- TAB 6: EDITABLE SYLLABUS -->
         <div id="tab-syllabus" class="tab-view">
           <div class="panel">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-              <div class="panel-title" style="margin-bottom: 0;">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                <span>Syllabus Tracker</span>
-              </div>
-              <button class="btn btn-engine" style="font-size: 11px;" onclick="runAiBacklogStrategist()">Rescue Plan</button>
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-              <input type="text" id="newChapterInput" class="input-field" placeholder="Add custom chapter..." onkeydown="if(event.key==='Enter') addNewChapter()" />
+            <div class="panel-title">Syllabus Matrix & Backlog Recovery</div>
+            <div class="flex-row" style="margin-bottom: 10px;">
+              <input type="text" id="newChapterInput" class="input-field" placeholder="Add chapter name..." onkeydown="if(event.key==='Enter') addNewChapter()" />
               <button class="btn btn-secondary" onclick="addNewChapter()">+ Add</button>
             </div>
-            
             <div id="syllabusContainer"></div>
-            <div id="backlogStrategyBox" style="display: none; margin-top: 14px; background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; font-size: 13px; line-height: 1.6;"></div>
+            <button class="btn btn-engine" style="width: 100%; margin-top: 10px;" onclick="runAiBacklogStrategist()">Generate 7-Day Rescue Plan</button>
+            <div id="backlogStrategyBox" style="display:none; margin-top: 10px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; padding:12px; font-size:13px; line-height:1.6;"></div>
           </div>
         </div>
 
+        <!-- TAB 7: BOSS ARCADE -->
         <div id="tab-arcade" class="tab-view">
           <div class="panel">
-            <div class="panel-title">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg>
-              <span>Arcade Break</span>
+            <div class="panel-title">Boss Battle Quiz</div>
+            <div class="flex-row" style="margin-bottom: 10px;">
+              <button class="btn btn-engine" style="flex:1;" onclick="initBossBattle()">Start Quiz Battle</button>
+              <button class="btn btn-secondary" style="flex:1;" onclick="generateAiRiddle()">Lateral Riddle</button>
             </div>
-            <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
-              <button class="btn btn-engine" onclick="initBossBattle()">Boss Quiz Battle</button>
-              <button class="btn btn-secondary" onclick="generateAiRiddle()">Lateral Riddle</button>
-            </div>
-            <div id="arcadeArena" style="background: var(--bg); border: 1px solid var(--card-border); border-radius: 12px; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px; text-align: center;">
-              <p style="color: var(--text-muted); font-size: 13px;">Pick a game mode above.</p>
+            <div id="arcadeArena" style="background:var(--bg); border:1px solid var(--card-border); border-radius:8px; padding:14px; text-align:center; min-height: 220px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <p style="color:var(--text-muted); font-size:12.5px;">Tap Start to battle the Quiz Boss.</p>
             </div>
           </div>
         </div>
@@ -670,77 +501,62 @@
     </main>
   </div>
 
-  <aside class="slide-scratchpad" id="scratchpad">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-      <h3 style="font-size: 15px; font-weight: 700;">Scratchpad</h3>
-      <button onclick="toggleScratchpad()" style="background: none; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer;">✕</button>
-    </div>
-    <textarea id="roughNotes" class="input-field" style="flex: 1; resize: none; line-height: 1.6;" placeholder="Scratchpad notes..."></textarea>
-  </aside>
-
+  <!-- Mobile Bottom Dock (App-Like Nav) -->
   <nav class="mobile-nav">
     <button class="mobile-nav-item active" onclick="switchTab('demon')">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
       <span>Demon</span>
     </button>
     <button class="mobile-nav-item" onclick="switchTab('solver')">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
       <span>Solver</span>
     </button>
-    <button class="mobile-nav-item" onclick="switchTab('lectures')">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-      <span>Lec</span>
-    </button>
     <button class="mobile-nav-item" onclick="switchTab('notes')">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
       <span>Vault</span>
     </button>
     <button class="mobile-nav-item" onclick="switchTab('test')">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path></svg>
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path></svg>
       <span>Exam</span>
     </button>
     <button class="mobile-nav-item" onclick="switchTab('syllabus')">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg>
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg>
       <span>Tasks</span>
     </button>
   </nav>
 
   <script>
+    // Boot
     window.addEventListener('DOMContentLoaded', () => {
       const fill = document.getElementById('splashFill');
       const splash = document.getElementById('splashScreen');
       if (fill) fill.style.width = '100%';
-
       const savedTheme = localStorage.getItem('sf_me_theme') || 'theme-oled';
       setInterfaceTheme(savedTheme, false);
-
-      setTimeout(() => {
-        if (splash) {
-          splash.style.opacity = '0';
-          splash.style.visibility = 'hidden';
-        }
-      }, 1200);
+      setTimeout(() => { if (splash) { splash.style.opacity = '0'; splash.style.visibility = 'hidden'; } }, 1000);
     });
 
-    function setInterfaceTheme(themeName, save = true) {
-      document.getElementById('appBody').className = themeName;
-      document.getElementById('themeSelector').value = themeName;
-      if (save) localStorage.setItem('sf_me_theme', themeName);
+    function setInterfaceTheme(t, s = true) {
+      document.getElementById('appBody').className = t;
+      document.getElementById('themeSelector').value = t;
+      if (s) localStorage.setItem('sf_me_theme', t);
     }
 
-    function cleanRender(text) {
-      if (!text) return '';
-      text = text.replace(/\$\$([\s\S]+?)\$\$/g, (m, eq) => {
+    // Clean Render KaTeX + Markdown
+    function cleanRender(t) {
+      if (!t) return '';
+      t = t.replace(/\$\$([\s\S]+?)\$\$/g, (m, eq) => {
         try { return katex.renderToString(eq.trim(), { displayMode: true, throwOnError: false }); } catch(e) { return eq; }
       });
-      text = text.replace(/\$([^\$\n]+?)\$/g, (m, eq) => {
+      t = t.replace(/\$([^\$\n]+?)\$/g, (m, eq) => {
         try { return katex.renderToString(eq.trim(), { displayMode: false, throwOnError: false }); } catch(e) { return eq; }
       });
-      text = text.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-      text = text.replace(/\*([^\*]+?)\*/g, '<i>$1</i>');
-      return text.replace(/\n/g, '<br/>');
+      t = t.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+      t = t.replace(/\*([^\*]+?)\*/g, '<i>$1</i>');
+      return t.replace(/\n/g, '<br/>');
     }
 
+    // Gemini Engine (Updated Valid Model Chain)
     let ENGINE_KEY = localStorage.getItem('sf_me_key') || localStorage.getItem('sf_engine_key') || '';
 
     function promptEngineKey() {
@@ -752,7 +568,6 @@
       }
     }
 
-    // Active Gemini models
     const CANDIDATE_MODELS = [
       'gemini-2.5-flash',
       'gemini-2.5-flash-lite'
@@ -760,7 +575,7 @@
 
     async function queryAiEngine(promptText, systemInstruction = "") {
       if (!ENGINE_KEY) {
-        alert("Please tap 'AI Key' on the top right to link your key first.");
+        alert("Connect your AI Key first via top button.");
         promptEngineKey();
         if (!ENGINE_KEY) throw new Error("No API key linked.");
       }
@@ -769,9 +584,7 @@
       for (const model of CANDIDATE_MODELS) {
         try {
           const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${ENGINE_KEY}`;
-          const payload = {
-            contents: [{ parts: [{ text: promptText }] }]
-          };
+          const payload = { contents: [{ parts: [{ text: promptText }] }] };
           if (systemInstruction) {
             payload.system_instruction = { parts: [{ text: systemInstruction }] };
           }
@@ -795,9 +608,10 @@
           lastError = e;
         }
       }
-      throw new Error(lastError?.message || "AI Busy. Check API key or retry in a few seconds.");
+      throw new Error(lastError?.message || "AI Busy. Check key or retry.");
     }
 
+    // Navigation
     function switchTab(t) {
       document.querySelectorAll('.tab-view').forEach(e => e.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
@@ -807,336 +621,220 @@
       if (target) target.classList.add('active');
 
       const titles = {
-        demon: '😈 Doubt Demon (Interrogator)',
-        solver: '🤖 AI Doubt Solver & Chatbot',
-        lectures: 'Lectures & AI Recap',
-        notes: 'High-Yield Vault',
-        test: 'Exam Suite & Exports',
-        syllabus: 'Syllabus & Backlog',
-        arcade: 'Boss Arcade'
+        demon: '😈 Doubt Demon',
+        solver: '🤖 AI Doubt Solver',
+        lectures: '🎬 Lectures',
+        notes: '📚 Vault Notes',
+        test: '📝 Exam Suite',
+        syllabus: '📊 Syllabus',
+        arcade: '⚔️ Arcade'
       };
       document.getElementById('viewTitle').innerText = titles[t] || 'StudyFlow ME';
 
-      const tabs = ['demon', 'solver', 'lectures', 'notes', 'test', 'syllabus', 'arcade'];
-      const idx = tabs.indexOf(t);
+      const map = ['demon', 'solver', 'lectures', 'notes', 'test', 'syllabus', 'arcade'];
+      const idx = map.indexOf(t);
       if (document.querySelectorAll('.sidebar .nav-item')[idx]) {
         document.querySelectorAll('.sidebar .nav-item')[idx].classList.add('active');
       }
-      if (document.querySelectorAll('.mobile-nav-item')[idx]) {
-        document.querySelectorAll('.mobile-nav-item')[idx].classList.add('active');
+      const mobTabs = ['demon', 'solver', 'notes', 'test', 'syllabus'];
+      const mIdx = mobTabs.indexOf(t);
+      if (mIdx !== -1 && document.querySelectorAll('.mobile-nav-item')[mIdx]) {
+        document.querySelectorAll('.mobile-nav-item')[mIdx].classList.add('active');
       }
     }
 
-    const DEMON_SYSTEM_PROMPT = `You are the Ruthless Doubt Demon ("The Conceptual Tormentor").
-Your sole purpose is to destroy the student's surface-level confidence and expose every conceptual fallacy, rote-memorization trap, or lazy intuition they possess.
-RULES:
-1. Speak with dark, sarcastic, condescending intellectual arrogance (use witty demonic metaphors like "shallow mortal intellect", "textbook parrot", "hollow reasoning").
-2. NEVER give them direct answers. Instead, craft a deceptive counter-example, paradox, or edge case that makes them question their premises.
-3. If they are right, grudgingly acknowledge it with cold skepticism, then immediately hit them with a brutal, far more intricate follow-up.
-4. Keep responses punchy, sharp, and biting (max 3-4 sentences).`;
-
-    let activeDemonTopic = "";
+    // Doubt Demon
+    const DEMON_PROMPT = `You are the Ruthless Doubt Demon. Expose every conceptual fallacy, rote memory trap, or lazy intuition the student has. Speak with dark, sarcastic intellectual arrogance. Never give direct answers. Construct deceptive counter-examples and paradoxes. Punchy, sharp responses (max 3 sentences).`;
+    let activeTopic = "";
 
     async function summonDemon() {
       const topic = document.getElementById('demonTopicInput').value.trim();
       const chat = document.getElementById('demonChatBox');
-      if (!topic) { alert("Give the Demon a topic to devour."); return; }
-
-      activeDemonTopic = topic;
-      chat.innerHTML = `<div class="demon-message" style="color:var(--accent);">Summoning the Doubt Demon for "${topic}"... Prepare your defenses.</div>`;
+      if (!topic) { alert("Give topic to the Demon."); return; }
+      activeTopic = topic;
+      chat.innerHTML = `<div class="demon-message" style="color:var(--accent);">Summoning Demon for "${topic}"...</div>`;
 
       try {
-        const opening = await queryAiEngine(
-          `The student claims they know "${topic}". Challenge them with your first brutal, deceptive conceptual riddle or premise test. Break their textbook confidence.`,
-          DEMON_SYSTEM_PROMPT
-        );
-        chat.innerHTML = `<div class="demon-message"><b>Doubt Demon:</b> ${cleanRender(opening)}</div>`;
+        const res = await queryAiEngine(`Student claims to understand "${topic}". Challenge them with a brutal counter-intuitive riddle or edge-case test.`, DEMON_PROMPT);
+        chat.innerHTML = `<div class="demon-message"><b>Doubt Demon:</b> ${cleanRender(res)}</div>`;
       } catch (e) {
-        chat.innerHTML = `<div style="color:var(--danger);">Demon slumbering: ${e.message}</div>`;
+        chat.innerHTML = `<div style="color:var(--danger);">${e.message}</div>`;
       }
     }
 
     async function sendDemonCounter() {
-      const input = document.getElementById('demonReplyInput');
+      const inp = document.getElementById('demonReplyInput');
       const chat = document.getElementById('demonChatBox');
-      const text = input.value.trim();
-      if (!text) return;
+      const txt = inp.value.trim();
+      if (!txt) return;
 
-      chat.innerHTML += `<div class="user-message"><b>You:</b> ${cleanRender(text)}</div>`;
-      input.value = '';
+      chat.innerHTML += `<div class="user-message"><b>You:</b> ${cleanRender(txt)}</div>`;
+      inp.value = '';
       chat.scrollTop = chat.scrollHeight;
 
       try {
-        const demonCounter = await queryAiEngine(
-          `Topic: "${activeDemonTopic}". Student arguments: "${text}". 
-Analyze their statement. If flawed or incomplete, ruthlessly dismantle it and question their logic. If correct, sneer and ask a far more vicious advanced conceptual question.`,
-          DEMON_SYSTEM_PROMPT
-        );
-        chat.innerHTML += `<div class="demon-message"><b>Doubt Demon:</b> ${cleanRender(demonCounter)}</div>`;
+        const res = await queryAiEngine(`Topic: "${activeTopic}". Student argued: "${txt}". Dismantle their flawed assumptions or sneer and ask a harder follow-up.`, DEMON_PROMPT);
+        chat.innerHTML += `<div class="demon-message"><b>Doubt Demon:</b> ${cleanRender(res)}</div>`;
         chat.scrollTop = chat.scrollHeight;
       } catch (e) {
-        chat.innerHTML += `<div style="color:var(--danger);">Error: ${e.message}</div>`;
+        chat.innerHTML += `<div style="color:var(--danger);">${e.message}</div>`;
       }
     }
 
+    // Quick Solver
     async function askDoubtSolver() {
-      const input = document.getElementById('solverUserInput');
+      const inp = document.getElementById('solverUserInput');
       const chat = document.getElementById('solverChatHistory');
-      const doubt = input.value.trim();
+      const doubt = inp.value.trim();
       if (!doubt) return;
 
       chat.innerHTML += `<div class="user-message"><b>You:</b> ${cleanRender(doubt)}</div>`;
-      input.value = '';
+      inp.value = '';
       chat.scrollTop = chat.scrollHeight;
 
-      const placeholder = document.createElement('div');
-      placeholder.style.color = "var(--accent)";
-      placeholder.innerText = "Analyzing and solving step-by-step...";
-      chat.appendChild(placeholder);
-
-      const solverInstruction = `You are a master academic educator and numerical solver for secondary and higher secondary students (CBSE, ICSE, JEE, NEET).
-Provide a clear, well-structured step-by-step breakdown:
-1. Given Data / Core Concept
-2. Formula / Principle Used
-3. Step-by-Step Calculation / Derivation
-4. Final Answer (highlighted) & Common Traps to avoid.`;
+      const p = document.createElement('div');
+      p.style.color = "var(--accent)";
+      p.innerText = "Solving step-by-step...";
+      chat.appendChild(p);
 
       try {
-        const solution = await queryAiEngine(doubt, solverInstruction);
-        placeholder.remove();
-        chat.innerHTML += `<div style="background:var(--card); border:1px solid var(--card-border); padding:12px; border-radius:8px; font-size:13px; line-height:1.6;"><b>AI Solver:</b><br/>${cleanRender(solution)}</div>`;
+        const res = await queryAiEngine(doubt, "You are a master academic teacher. Provide clear step-by-step calculation, core formula, and final answer with exam traps.");
+        p.remove();
+        chat.innerHTML += `<div style="background:var(--card); border:1px solid var(--card-border); padding:10px; border-radius:8px; font-size:13px; line-height:1.5;">${cleanRender(res)}</div>`;
         chat.scrollTop = chat.scrollHeight;
-      } catch (e) {
-        placeholder.innerHTML = `<span style="color:var(--danger);">Failed to solve: ${e.message}</span>`;
-      }
+      } catch (e) { p.innerText = e.message; }
     }
 
+    // Lectures
     function playLecture() {
-      const input = document.getElementById('lectureUrlInput').value.trim();
-      const player = document.getElementById('lecturePlayer');
-      if (!input) return;
-
-      let id = '';
-      if (input.includes('v=')) id = input.split('v=')[1].split('&')[0];
-      else if (input.includes('youtu.be/')) id = input.split('youtu.be/')[1].split('?')[0];
-      else if (input.length === 11) id = input;
-
-      if (id) {
-        player.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1" allowfullscreen></iframe>`;
-      } else {
-        player.innerHTML = `<iframe src="${input}"></iframe>`;
-      }
+      const u = document.getElementById('lectureUrlInput').value.trim();
+      const p = document.getElementById('lecturePlayer');
+      let id = u.includes('v=') ? u.split('v=')[1].split('&')[0] : (u.includes('youtu.be/') ? u.split('youtu.be/')[1] : u);
+      if (id) p.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1" style="width:100%; height:100%; border:none;" allowfullscreen></iframe>`;
     }
 
     async function generateAiLectureRecap() {
-      const input = document.getElementById('lectureUrlInput').value.trim();
+      const u = document.getElementById('lectureUrlInput').value.trim();
       const box = document.getElementById('lectureRecapBox');
-      const content = document.getElementById('lectureRecapContent');
-      if (!input) { alert("Enter a lecture URL or topic first."); return; }
-
+      if (!u) return;
       box.style.display = 'block';
-      content.innerHTML = "Extracting high-yield lecture points...";
-
-      const prompt = `Analyze lecture/topic: "${input}". Provide: 1. Core Summary, 2. Important Formulas/Definitions, 3. High-Frequency Exam Traps. Clean formatting with bullets.`;
+      box.innerText = "Extracting summary...";
       try {
-        const res = await queryAiEngine(prompt);
-        content.innerHTML = cleanRender(res);
-      } catch (e) { content.innerText = e.message; }
+        const r = await queryAiEngine(`Extract key definitions, formulas and 3 exam traps for: "${u}"`);
+        box.innerHTML = cleanRender(r);
+      } catch(e) { box.innerText = e.message; }
     }
 
+    // Notes
     async function generateLiveNotes(type) {
-      const topic = document.getElementById('notesTopicInput').value.trim() || 'Tissues Class 9';
-      const disp = document.getElementById('notesDisplay');
-      disp.innerHTML = `Generating ${type} for "${topic}"...`;
-
-      let prompt = `Create comprehensive ${type} notes for "${topic}". High-yield, exam-focused, clean KaTeX formula structure.`;
+      const topic = document.getElementById('notesTopicInput').value.trim() || 'Tissues';
+      const d = document.getElementById('notesDisplay');
+      d.innerText = `Generating ${type} for "${topic}"...`;
       try {
-        const res = await queryAiEngine(prompt);
-        disp.innerHTML = cleanRender(res);
-      } catch (e) { disp.innerText = e.message; }
+        const res = await queryAiEngine(`Provide exam-focused ${type} notes for "${topic}". High-yield, clear headings.`);
+        d.innerHTML = cleanRender(res);
+      } catch(e) { d.innerText = e.message; }
     }
 
-    let currentTestPaperText = '';
-    let currentGradeReportText = '';
-    let currentExamTopic = '';
-
+    // Exam
+    let curPaper = '';
     async function generateExamPaper() {
-      const topic = document.getElementById('testTopicInput').value.trim() || 'Motion';
-      const mode = document.getElementById('testModeSelect').value;
-      const marks = document.getElementById('testMarksSelect').value;
-      const card = document.getElementById('examPaperCard');
-      const content = document.getElementById('paperContent');
-      const title = document.getElementById('paperTitle');
-
-      currentExamTopic = topic;
-      card.style.display = 'block';
-      content.innerHTML = "Drafting questions...";
-
-      const prompt = `Create a ${marks}-marks ${mode} paper for chapter "${topic}". Include question numbers and mark weightage [e.g. 3 Marks]. Do not include answers.`;
+      const t = document.getElementById('testTopicInput').value.trim() || 'Motion';
+      const c = document.getElementById('paperContent');
+      document.getElementById('examPaperCard').style.display = 'block';
+      c.innerText = "Drafting 15-marks test...";
       try {
-        const paper = await queryAiEngine(prompt);
-        currentTestPaperText = paper;
-        title.innerText = `${topic.toUpperCase()} (${marks}M - ${mode.toUpperCase()})`;
-        content.innerHTML = cleanRender(paper);
-      } catch (e) { content.innerText = e.message; }
-    }
-
-    async function fetchAndDownloadAnswerKey() {
-      if (!currentTestPaperText) return;
-      try {
-        const key = await queryAiEngine(`Provide step-by-step marking key for:\n\n${currentTestPaperText}`);
-        downloadText(`${currentExamTopic}_Key.txt`, key);
-      } catch (e) { alert(e.message); }
+        curPaper = await queryAiEngine(`Create 3 numbered questions totaling 15 marks on "${t}". No answers.`);
+        c.innerHTML = cleanRender(curPaper);
+      } catch(e) { c.innerText = e.message; }
     }
 
     async function gradeExamAnswers() {
-      const answers = document.getElementById('studentAnswerText').value.trim();
-      const marks = document.getElementById('testMarksSelect').value;
-      const reportCard = document.getElementById('gradeReportCard');
-      const body = document.getElementById('gradeReportBody');
-      if (!answers) { alert("Enter solutions first."); return; }
-
-      reportCard.style.display = 'block';
-      body.innerHTML = "Evaluating your paper against official grading rubrics...";
-
-      const prompt = `Grade this student submission out of ${marks} marks.
-PAPER:
-${currentTestPaperText}
-ANSWERS:
-${answers}
-Give: 1. Total Score, 2. Question-wise marks, 3. Missing keywords/points, 4. Perfect Model Answers.`;
-
+      const ans = document.getElementById('studentAnswerText').value.trim();
+      const rep = document.getElementById('gradeReportCard');
+      rep.style.display = 'block';
+      rep.innerText = "Grading solutions...";
       try {
-        const report = await queryAiEngine(prompt);
-        currentGradeReportText = report;
-        body.innerHTML = cleanRender(report);
-      } catch (e) { body.innerText = e.message; }
+        const r = await queryAiEngine(`Grade answers out of 15.\nPAPER:\n${curPaper}\nANSWERS:\n${ans}\nGive score, question-wise marks and missed keywords.`);
+        rep.innerHTML = cleanRender(r);
+      } catch(e) { rep.innerText = e.message; }
     }
 
-    function downloadText(fn, txt) {
-      if (!txt) return;
-      const b = new Blob([txt], { type: 'text/plain;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(b);
-      a.download = fn;
-      a.click();
-    }
-
-    let defaultSyllabus = [
-      { name: "Tissues (Class 9 Bio)", lec: true, notes: true, test: false },
-      { name: "Motion (Class 9 Physics)", lec: true, notes: false, test: false },
-      { name: "Matter in Our Surroundings", lec: false, notes: false, test: false }
-    ];
-    let syllabus = JSON.parse(localStorage.getItem('sf_me_syllabus') || JSON.stringify(defaultSyllabus));
+    // Editable Syllabus
+    let syllabus = JSON.parse(localStorage.getItem('sf_me_syl') || JSON.stringify([
+      { name: "Tissues (Biology)", done: false },
+      { name: "Motion (Physics)", done: true }
+    ]));
 
     function renderSyllabus() {
       const c = document.getElementById('syllabusContainer');
-      if (syllabus.length === 0) {
-        c.innerHTML = `<div style="text-align:center; padding:16px; color:var(--text-muted); font-size:12.5px;">No chapters. Add one above!</div>`;
-        return;
-      }
       c.innerHTML = syllabus.map((ch, i) => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--bg); border:1px solid var(--card-border); border-radius:9px; margin-bottom:6px; gap:8px;">
-          <span style="font-weight:600; font-size:13px; flex:1;">${ch.name}</span>
-          <div style="display:flex; align-items:center; gap:10px; font-size:11.5px;">
-            <label><input type="checkbox" ${ch.lec ? 'checked' : ''} onchange="toggleSyllabus(${i}, 'lec')"> Lec</label>
-            <label><input type="checkbox" ${ch.notes ? 'checked' : ''} onchange="toggleSyllabus(${i}, 'notes')"> Notes</label>
-            <label><input type="checkbox" ${ch.test ? 'checked' : ''} onchange="toggleSyllabus(${i}, 'test')"> Test</label>
-            <button onclick="deleteChapter(${i})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:bold; font-size:14px;">✕</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 10px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; margin-bottom:6px;">
+          <span style="font-size:13px; font-weight:600;">${ch.name}</span>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" ${ch.done ? 'checked' : ''} onchange="toggleSyl(${i})">
+            <button onclick="delSyl(${i})" style="background:none; border:none; color:var(--danger); font-size:14px; cursor:pointer;">✕</button>
           </div>
         </div>
       `).join('');
     }
-
-    function toggleSyllabus(i, k) {
-      syllabus[i][k] = !syllabus[i][k];
-      localStorage.setItem('sf_me_syllabus', JSON.stringify(syllabus));
-    }
+    function toggleSyl(i) { syllabus[i].done = !syllabus[i].done; localStorage.setItem('sf_me_syl', JSON.stringify(syllabus)); }
     function addNewChapter() {
-      const input = document.getElementById('newChapterInput');
-      const val = input.value.trim();
-      if (!val) return;
-      syllabus.push({ name: val, lec: false, notes: false, test: false });
-      localStorage.setItem('sf_me_syllabus', JSON.stringify(syllabus));
-      input.value = '';
+      const inp = document.getElementById('newChapterInput');
+      if (!inp.value.trim()) return;
+      syllabus.push({ name: inp.value.trim(), done: false });
+      localStorage.setItem('sf_me_syl', JSON.stringify(syllabus));
+      inp.value = '';
       renderSyllabus();
     }
-    function deleteChapter(i) {
-      syllabus.splice(i, 1);
-      localStorage.setItem('sf_me_syllabus', JSON.stringify(syllabus));
-      renderSyllabus();
-    }
+    function delSyl(i) { syllabus.splice(i, 1); localStorage.setItem('sf_me_syl', JSON.stringify(syllabus)); renderSyllabus(); }
     renderSyllabus();
 
     async function runAiBacklogStrategist() {
       const box = document.getElementById('backlogStrategyBox');
       box.style.display = 'block';
-      box.innerHTML = "Creating 7-day rescue schedule...";
-      const pending = syllabus.filter(s => !s.lec || !s.notes || !s.test);
+      box.innerText = "Drafting 7-day plan...";
       try {
-        const plan = await queryAiEngine(`Create an intense 7-day recovery roadmap for pending chapters: ${JSON.stringify(pending)}`);
-        box.innerHTML = cleanRender(plan);
-      } catch (e) { box.innerText = e.message; }
+        const p = await queryAiEngine(`Make a fast 7-day rescue roadmap for: ${JSON.stringify(syllabus.filter(s=>!s.done))}`);
+        box.innerHTML = cleanRender(p);
+      } catch(e) { box.innerText = e.message; }
     }
 
-    let bossHp = 100, playerHp = 100;
+    // Arcade
+    let hpB = 100, hpP = 100;
     async function initBossBattle() {
-      const arena = document.getElementById('arcadeArena');
-      arena.innerHTML = "Summoning Quiz Boss...";
-      bossHp = 100; playerHp = 100;
-      nextBossQuestion();
+      const a = document.getElementById('arcadeArena');
+      a.innerText = "Summoning Quiz...";
+      hpB = 100; hpP = 100;
+      nextQ();
     }
-    async function nextBossQuestion() {
-      const arena = document.getElementById('arcadeArena');
-      if (bossHp <= 0) { arena.innerHTML = `<h3>VICTORY! You defeated the Boss!</h3><button class="btn btn-engine" style="margin-top:10px;" onclick="initBossBattle()">Play Again</button>`; return; }
-      if (playerHp <= 0) { arena.innerHTML = `<h3>DEFEAT! Your HP reached 0.</h3><button class="btn btn-engine" style="margin-top:10px;" onclick="initBossBattle()">Retry</button>`; return; }
-
-      const q = await queryAiEngine("Generate 1 challenging science MCQ with options (A, B, C, D). Put 'CORRECT: X' at the very bottom.");
-      const parts = q.split('CORRECT:');
-      const questionText = parts[0].trim();
-      const correctAns = parts[1] ? parts[1].trim()[0] : 'A';
-
-      arena.innerHTML = `
-        <div style="display:flex; justify-content:space-between; width:100%; max-width:380px; margin-bottom:12px; font-weight:700; font-size:12px;">
-          <span style="color:var(--success);">YOUR HP: ${playerHp}</span>
-          <span style="color:var(--danger);">BOSS HP: ${bossHp}</span>
+    async function nextQ() {
+      const a = document.getElementById('arcadeArena');
+      if (hpB <= 0) { a.innerHTML = `<h3>VICTORY! Boss Down!</h3><button class="btn btn-engine" style="margin-top:8px;" onclick="initBossBattle()">Play Again</button>`; return; }
+      if (hpP <= 0) { a.innerHTML = `<h3>DEFEAT! Try Again.</h3><button class="btn btn-engine" style="margin-top:8px;" onclick="initBossBattle()">Retry</button>`; return; }
+      const q = await queryAiEngine("Make 1 difficult science MCQ with A,B,C,D. End line strictly: 'CORRECT: X'");
+      const p = q.split('CORRECT:');
+      const ans = p[1] ? p[1].trim()[0] : 'A';
+      a.innerHTML = `
+        <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:8px; font-weight:700; font-size:11px;">
+          <span style="color:var(--success);">YOUR HP: ${hpP}</span>
+          <span style="color:var(--danger);">BOSS HP: ${hpB}</span>
         </div>
-        <div style="font-size:13px; line-height:1.5; text-align:left; max-width:400px; margin-bottom:12px;">${cleanRender(questionText)}</div>
-        <div style="display:flex; gap:8px;">
-          ${['A','B','C','D'].map(opt => `<button class="btn btn-secondary" onclick="handleBossAnswer('${opt}', '${correctAns}')">${opt}</button>`).join('')}
+        <div style="font-size:12.5px; text-align:left; margin-bottom:10px;">${cleanRender(p[0])}</div>
+        <div class="flex-row">
+          ${['A','B','C','D'].map(o => `<button class="btn btn-secondary" style="flex:1;" onclick="ansQ('${o}','${ans}')">${o}</button>`).join('')}
         </div>`;
     }
-    function handleBossAnswer(ch, cor) {
-      if (ch === cor) { bossHp -= 35; alert("[CRITICAL HIT] Boss took 35 DMG!"); }
-      else { playerHp -= 35; alert(`[HIT] You took 35 DMG! Correct was ${cor}`); }
-      nextBossQuestion();
+    function ansQ(c, a) {
+      if (c === a) { hpB -= 35; alert("[CRITICAL] Boss took 35 DMG!"); }
+      else { hpP -= 35; alert(`[HIT] Took 35 DMG! Correct: ${a}`); }
+      nextQ();
     }
     async function generateAiRiddle() {
-      const arena = document.getElementById('arcadeArena');
-      arena.innerHTML = "Summoning Lateral Science Riddle...";
-      const r = await queryAiEngine("Provide 1 mind-bending science/lateral thinking riddle with answer hidden below.");
-      arena.innerHTML = `<div style="font-size:13px; line-height:1.6; max-width:420px; text-align:left;">${cleanRender(r)}</div><button class="btn btn-secondary" style="margin-top:10px;" onclick="generateAiRiddle()">Next Riddle</button>`;
-    }
-
-    function toggleScratchpad() { document.getElementById('scratchpad').classList.toggle('open'); }
-    const rough = document.getElementById('roughNotes');
-    rough.value = localStorage.getItem('sf_me_scratch') || '';
-    rough.addEventListener('input', () => localStorage.setItem('sf_me_scratch', rough.value));
-
-    let noiseSrc = null;
-    function toggleAmbientNoise() {
-      const b = document.getElementById('noiseBtnText');
-      if (!noiseSrc) {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const buf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
-        const data = buf.getChannelData(0);
-        for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.04;
-        const s = ctx.createBufferSource(); s.buffer = buf; s.loop = true; s.connect(ctx.destination); s.start();
-        noiseSrc = s;
-        b.innerText = 'Stop';
-      } else {
-        noiseSrc.stop(); noiseSrc = null; b.innerText = 'Focus Sound';
-      }
+      const a = document.getElementById('arcadeArena');
+      a.innerText = "Loading riddle...";
+      const r = await queryAiEngine("Give 1 clever lateral science puzzle with solution hidden below.");
+      a.innerHTML = `<div style="font-size:12.5px; text-align:left;">${cleanRender(r)}</div><button class="btn btn-secondary" style="margin-top:10px;" onclick="generateAiRiddle()">Next</button>`;
     }
   </script>
 </body>
